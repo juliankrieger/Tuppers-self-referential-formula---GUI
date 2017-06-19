@@ -11,6 +11,8 @@ import org.w3c.dom.css.Rect;
 
 import TSRF.Rectangle;
 
+import java.math.BigInteger;
+
 
 //TODO
 /*
@@ -239,8 +241,14 @@ public class Drawer extends JPanel implements MouseListener, ActionListener{
 		}
 		
 		
+		printBigSequence(sequence);
 		
-		for(int n = 0; n < sequence.length; n++){
+	
+	}
+	
+	public void printBigSequence(int[] sequence){
+		
+		for(int n = 0; n < 0; n++){
 			
 			if( (n % columns == 0)){
 				System.out.println('\n');
@@ -249,6 +257,26 @@ public class Drawer extends JPanel implements MouseListener, ActionListener{
 			System.out.print(sequence[n]);
 		}
 		
+		BigInteger sum =  BigInteger.valueOf(0);
+		int exponent = 0;
+		
+		for(int n = sequence.length - 1; n > 0; n--){
+			
+			
+			if(sequence[n] == 1){
+				long potency = (long) Math.pow(2, exponent);
+				sum = (sum.add(BigInteger.valueOf(potency)));
+				
+			}
+			sum = sum.multiply(BigInteger.valueOf(10));
+			exponent += 1;
+			
+		}
+		
+		sum = sum.multiply(BigInteger.valueOf(17));
+		
+		System.out.println(sum);
+	
 		
 	}
 }
