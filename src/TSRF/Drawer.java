@@ -67,6 +67,15 @@ public class Drawer extends JPanel implements MouseListener{
 		JFrame frame = new JFrame("Tuppers formula"); //Start JFrame
 		this.addMouseListener(this); //Add the mouse listener to the component
 		frame.add(this); //add this component to the frame
+		
+		JButton button = new JButton("Calculate key");
+		button.setPreferredSize(new Dimension(150, 60));
+		
+		JPanel panel = new JPanel();
+		panel.add(button);
+		
+		frame.add(panel, BorderLayout.EAST);
+		
 		frame.pack(); //pack the frame
 		frame.setVisible(true); //set it to visible
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //Exit on Close 
