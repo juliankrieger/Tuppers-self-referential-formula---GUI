@@ -30,7 +30,7 @@ import TSRF.Rectangle;
 * - After everything is finished : Calculate Tuppers formula and return the calculated k in the JFRAME
 * - Make the return Field copy-able.
 */
-public class Drawer extends JPanel implements MouseListener{
+public class Drawer extends JPanel implements MouseListener, ActionListener{
 
 	public static void main(String[] args){
 		//TODO
@@ -57,6 +57,7 @@ public class Drawer extends JPanel implements MouseListener{
 	private Point offset = (new Point((tile.LowerRightCorner.x - tile.UpperLeftCorner.x), (tile.LowerRightCorner.x - tile.UpperLeftCorner.x))); 
 	private Point gridStartPoint = new Point(20, 20);
 	private Rectangle[] tileArray = new Rectangle[17 * 106];
+	private int[] coloredTiles = new int[17 * 106];
 	
 	BufferedImage image; //Buffered Image
 	
@@ -70,6 +71,7 @@ public class Drawer extends JPanel implements MouseListener{
 		
 		JButton button = new JButton("Calculate key");
 		button.setPreferredSize(new Dimension(150, 60));
+		button.addActionListener(this);
 		
 		JPanel panel = new JPanel();
 		panel.add(button);
@@ -78,7 +80,7 @@ public class Drawer extends JPanel implements MouseListener{
 		
 		frame.pack(); //pack the frame
 		frame.setVisible(true); //set it to visible
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //Exit on Close 
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); //Exit on Close 
 		
 		
 		initializeGrid(gridStartPoint);
@@ -111,6 +113,8 @@ public class Drawer extends JPanel implements MouseListener{
                 	if(k != rows - 2 && i != columns - 2 && k != rows - 1 && i != columns - 1){ //dirty workaround
 						graphics.drawRect(updatedULC.x, updatedULC.y, 
 								tile.LowerRightCorner.x, tile.LowerRightCorner.y);
+						
+						
                 	}
                 	
                 	tileArray[i + ((tupper_width / tupper_scale) * k)] = 
@@ -119,6 +123,7 @@ public class Drawer extends JPanel implements MouseListener{
                 							tile.LowerRightCorner.y + (offset.y * k) - 1));
 			}
 		}
+		//Maybe dispose of Graphic Element here?
 	}
 	
 	public Point movePoint(Point base, Point vector){
@@ -148,7 +153,10 @@ public class Drawer extends JPanel implements MouseListener{
 			
 			if(bool){
 				colorField = new Rectangle(tileArray[i].UpperLeftCorner, tileArray[i].LowerRightCorner);
+				System.out.println("Colored the Tile at position " + i);
+				coloredTiles[i] = 1;
 				break;
+				
 			}
 		}
 		return colorField;
@@ -208,5 +216,39 @@ public class Drawer extends JPanel implements MouseListener{
 	@Override
 	public void paintComponent(Graphics graphics){
 		graphics.drawImage(image, 0, 0, null);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		int counter = 0;
+		int[] sequence = new int[106 * 17];
+		
+		for(int j = 0; j < columns; j++){
+			for(int i = rows; i > 0; i--){
+				
+				int position = columns * (i - 1) + j;
+				
+				if(coloredTiles[position] == 1){
+					sequence[counter] = 1;
+					System.out.println("Current pos: " + position);
+					System.out.println("Current counter: " + counter);
+					System.out.println("Sequence on position " + counter + ": " + sequence[counter]);
+				} else{sequence[counter] = 0;}
+				counter ++;
+			}
+		}
+		
+		
+		
+		for(int n = 0; n < sequence.length; n++){
+			
+			if( (n % columns == 0)){
+				System.out.println('\n');
+			}
+			
+			System.out.print(sequence[n]);
+		}
+		
+		
 	}
 }
